@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { filterImageFromURL, deleteLocalFiles } from './util/util';
+import { Request, Response} from 'express';
 
 (async () => {
 
@@ -33,16 +34,16 @@ import { filterImageFromURL, deleteLocalFiles } from './util/util';
 
   // Root Endpoint
   // Displays a simple message to the user
-  app.get("/", async (req, res) => {
+  app.get("/", async (req: Request, res: Response) => {
     res.send("Filter image app");
   });
 
-  app.get("/filteredimage", (req: any, res) => {
-    let url = req.query.image_url;
+  app.get("/filteredimage", async (req: Request, res: Response) => {
+    let url: string =  req.query.image_url as string;
     if (url) {
       filterImageFromURL(url).then(
         (success) => {
-          res.status(200).sendFile(success, () => { 
+          res.status(200).sendFile(success, () => {
             deleteLocalFiles([success]);
           });
         },
